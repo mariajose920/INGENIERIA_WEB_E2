@@ -7,6 +7,7 @@
     
     <div v-else-if="error" class="estado-error">
       <p>No se pudieron cargar los servicios. Intente nuevamente.</p>
+      <p class="error-tecnico"><small>Detalle técnico: {{ error }}</small></p>
       <button @click="cargarDatos" class="btn-reintentar">Reintentar</button>
     </div>
     
