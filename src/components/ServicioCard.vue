@@ -1,16 +1,25 @@
 <template>
   <div class="servicio-card">
-    <h3>{{ servicio.nombre }}</h3>
+    <div class="card-header">
+      <h3>{{ servicio.nombre }}</h3>
+      <!-- Botón de Favoritos. Emite el evento al padre al hacer clic -->
+      <button 
+        @click="$emit('toggle-favorito', servicio.id)" 
+        class="btn-favorito"
+        :class="{ activo: esFavorito }"
+        :title="esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+      >
+        {{ esFavorito ? '★' : '☆' }}
+      </button>
+    </div>
+    
     <p class="categoria">{{ servicio.categoria }}</p>
     <p class="descripcion">{{ servicio.descripcion }}</p>
-    <!-- Formateo del precio a CLP -->
     <p class="precio">{{ formatoPrecio(servicio.precio) }}</p>
     
-    <!-- Renderizado condicional para la disponibilidad -->
     <p v-if="servicio.disponible" class="disponible">Disponible</p>
     <p v-else class="no-disponible">No Disponible</p>
     
-    <!-- Enlace dinámico al detalle del servicio -->
     <RouterLink :to="`/servicios/${servicio.id}`" class="btn-detalle">
       Ver detalle
     </RouterLink>
@@ -20,15 +29,21 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 
-// Definimos las props que recibe el componente
+// Definimos las props que recibe el componente desde su padre
 const props = defineProps({
   servicio: {
     type: Object,
     required: true
+  },
+  esFavorito: {
+    type: Boolean,
+    default: false
   }
 })
 
-// Función para formatear el precio como moneda chilena (CLP)
+// Definimos los eventos que este componente hijo puede emitir hacia su padre
+defineEmits(['toggle-favorito'])
+
 const formatoPrecio = (precio) => {
   return precio.toLocaleString('es-CL', {
     style: 'currency',
@@ -45,11 +60,38 @@ const formatoPrecio = (precio) => {
   margin-bottom: 15px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: relative;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-header h3 {
+  margin: 0;
+  padding-right: 30px;
+}
+.btn-favorito {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s;
+  padding: 0;
+  line-height: 1;
+}
+.btn-favorito.activo {
+  color: #f1c40f; /* Color estrella activa (dorado) */
+}
+.btn-favorito:hover {
+  transform: scale(1.1);
 }
 .categoria {
   font-size: 0.9em;
   color: #666;
   text-transform: uppercase;
+  margin-top: 5px;
 }
 .descripcion {
   margin: 10px 0;
