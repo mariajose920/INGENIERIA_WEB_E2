@@ -3,18 +3,10 @@
     <h1>Catálogo de Servicios</h1>
     
     <div class="filtros">
-      <input 
-        type="text" 
-        v-model="busqueda" 
-        placeholder="Buscar por nombre..." 
-        class="input-busqueda"
-      />
-      
+      <input type="text" v-model="busqueda" placeholder="Buscar por nombre..." class="input-busqueda" />
       <select v-model="categoriaSeleccionada" class="select-categoria">
         <option value="">Todas las categorías</option>
-        <option v-for="cat in categoriasDisponibles" :key="cat" :value="cat">
-          {{ cat }}
-        </option>
+        <option v-for="cat in categoriasDisponibles" :key="cat" :value="cat">{{ cat }}</option>
       </select>
     </div>
 
@@ -23,10 +15,6 @@
     </div>
     
     <div v-else class="grid-servicios">
-      <!-- 
-        Comunicación Padre -> Hijo: Pasamos 'servicio' y 'es-favorito' por props 
-        Comunicación Hijo -> Padre: Escuchamos el evento personalizado '@toggle-favorito'
-      -->
       <ServicioCard 
         v-for="servicio in serviciosFiltrados" 
         :key="servicio.id" 
@@ -39,24 +27,27 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import ServicioCard from '../components/ServicioCard.vue'
 import { serviciosMock } from '../services/mockData.js'
+import { cargarFavoritos, guardarFavoritos } from '../services/favoritosStorage.js'
 
 const servicios = ref(serviciosMock)
 const busqueda = ref('')
 const categoriaSeleccionada = ref('')
 
-// Ref que almacena los IDs de los servicios marcados como favoritos (Etapa 6)
-const favoritos = ref([])
+// Inicializamos el estado desde localStorage
+const favoritos = ref(cargarFavoritos())
 
-// Función que maneja el evento emitido por el hijo
+// Observamos los cambios en el array de favoritos para guardarlos automáticamente
+watch(favoritos, (nuevosFavoritos) => {
+  guardarFavoritos(nuevosFavoritos)
+}, { deep: true }) // deep: true asegura que detecte cambios dentro del array
+
 const manejarToggleFavorito = (id) => {
   if (favoritos.value.includes(id)) {
-    // Si ya es favorito, lo quitamos filtrando el array
     favoritos.value = favoritos.value.filter(favId => favId !== id)
   } else {
-    // Si no es favorito, lo agregamos al array
     favoritos.value.push(id)
   }
 }
