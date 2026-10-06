@@ -1,6 +1,6 @@
 export async function obtenerServicios() {
-  // Realizamos la petición HTTP GET al archivo JSON estático
-  const response = await fetch('/servicios.json')
+  // Realizamos la petición HTTP GET al archivo JSON estático usando BASE_URL
+  const response = await fetch(`${import.meta.env.BASE_URL}servicios.json`)
   
   // Verificamos si la respuesta es exitosa (código 200-299)
   if (!response.ok) {
