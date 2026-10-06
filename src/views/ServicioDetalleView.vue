@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { obtenerServicios } from '../services/serviciosApi.js'
+import { useServicios } from '../services/useServicios.js'
 
 const route = useRoute()
 // Convertimos el id a una propiedad computada.
@@ -51,22 +51,7 @@ const route = useRoute()
 // idParam se recalcula automáticamente manteniendo la reactividad.
 const idParam = computed(() => Number(route.params.id))
 
-const servicios = ref([])
-const cargando = ref(true)
-const error = ref(null)
-
-const cargarDatos = async () => {
-  cargando.value = true
-  error.value = null
-  try {
-    const data = await obtenerServicios()
-    servicios.value = data
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    cargando.value = false
-  }
-}
+const { servicios, cargando, error, cargarDatos } = useServicios()
 
 onMounted(() => {
   cargarDatos()

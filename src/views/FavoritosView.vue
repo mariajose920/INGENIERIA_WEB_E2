@@ -38,29 +38,14 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import ServicioCard from '../components/ServicioCard.vue'
 import { cargarFavoritos, guardarFavoritos } from '../services/favoritosStorage.js'
-import { obtenerServicios } from '../services/serviciosApi.js'
+import { useServicios } from '../services/useServicios.js'
 
 const favoritos = ref(cargarFavoritos())
-const servicios = ref([])
-const cargando = ref(true)
-const error = ref(null)
+const { servicios, cargando, error, cargarDatos } = useServicios()
 
 watch(favoritos, (nuevosFavoritos) => {
   guardarFavoritos(nuevosFavoritos)
 }, { deep: true })
-
-const cargarDatos = async () => {
-  cargando.value = true
-  error.value = null
-  try {
-    const data = await obtenerServicios()
-    servicios.value = data
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    cargando.value = false
-  }
-}
 
 onMounted(() => {
   cargarDatos()

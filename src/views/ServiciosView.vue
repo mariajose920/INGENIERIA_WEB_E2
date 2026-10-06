@@ -44,11 +44,10 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import ServicioCard from '../components/ServicioCard.vue'
 import { cargarFavoritos, guardarFavoritos } from '../services/favoritosStorage.js'
-import { obtenerServicios } from '../services/serviciosApi.js'
+import { useServicios } from '../services/useServicios.js'
 
-const servicios = ref([])
-const cargando = ref(true)
-const error = ref(null)
+// Usamos el composable para reutilizar la lógica de obtención de datos
+const { servicios, cargando, error, cargarDatos } = useServicios()
 
 const busqueda = ref('')
 const categoriaSeleccionada = ref('')
@@ -57,20 +56,6 @@ const favoritos = ref(cargarFavoritos())
 watch(favoritos, (nuevosFavoritos) => {
   guardarFavoritos(nuevosFavoritos)
 }, { deep: true })
-
-// Función que carga los datos usando async/await
-const cargarDatos = async () => {
-  cargando.value = true
-  error.value = null
-  try {
-    const data = await obtenerServicios()
-    servicios.value = data
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    cargando.value = false
-  }
-}
 
 // onMounted se ejecuta cuando el componente se añade al DOM
 onMounted(() => {

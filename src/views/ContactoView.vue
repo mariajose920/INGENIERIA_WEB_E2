@@ -23,7 +23,7 @@
       <div class="form-group">
         <label for="servicioInteres">Servicio de interés:</label>
         
-        <div v-if="errorFetch" class="error-msg-visible">
+        <div v-if="error" class="error-msg-visible">
           No se pudieron cargar los servicios; intente más tarde.
         </div>
         <select v-else id="servicioInteres" v-model="formulario.servicioInteres">
@@ -41,7 +41,7 @@
         <span v-show="errores.mensaje" class="error-msg">{{ errores.mensaje }}</span>
       </div>
 
-      <button type="submit" class="btn-enviar" :disabled="cargandoServicios || errorFetch">
+      <button type="submit" class="btn-enviar" :disabled="cargando || error">
         Enviar Mensaje
       </button>
     </form>
@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { obtenerServicios } from '../services/serviciosApi.js'
+import { useServicios } from '../services/useServicios.js'
 
 const formulario = ref({
   nombre: '',
@@ -67,20 +67,12 @@ const errores = ref({
 })
 
 const mensajeExito = ref('')
-const servicios = ref([])
-const cargandoServicios = ref(true)
-const errorFetch = ref(false)
 
-onMounted(async () => {
-  try {
-    const data = await obtenerServicios()
-    servicios.value = data
-  } catch (error) {
-    console.error("Error al cargar servicios para el formulario", error)
-    errorFetch.value = true
-  } finally {
-    cargandoServicios.value = false
-  }
+// Usamos el composable
+const { servicios, cargando, error, cargarDatos } = useServicios()
+
+onMounted(() => {
+  cargarDatos()
 })
 
 const validarYEnviar = () => {
