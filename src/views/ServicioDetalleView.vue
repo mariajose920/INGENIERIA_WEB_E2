@@ -13,7 +13,18 @@
     
     <template v-else>
       <div v-if="servicio" class="detalle-card">
-        <h1>{{ servicio.nombre }}</h1>
+        <div class="card-header">
+          <h1>{{ servicio.nombre }}</h1>
+          <!-- Botón de favorito. Llama a toggleFavorito al hacer clic -->
+          <button 
+            @click="toggleFavorito" 
+            class="btn-favorito"
+            :class="{ activo: esFavorito }"
+            :title="esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+          >
+            {{ esFavorito ? '★' : '☆' }}
+          </button>
+        </div>
         <span class="categoria-badge">{{ servicio.categoria }}</span>
         
         <p class="descripcion-completa">{{ servicio.descripcionCompleta || servicio.descripcion }}</p>
@@ -41,17 +52,23 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useServicios } from '../services/useServicios.js'
+import { cargarFavoritos, guardarFavoritos } from '../services/favoritosStorage.js'
 
 const route = useRoute()
-// Convertimos el id a una propiedad computada.
-// Esto asegura que si la ruta cambia (ej: navegando de /servicios/1 a /servicios/2 sin recargar),
-// idParam se recalcula automáticamente manteniendo la reactividad.
 const idParam = computed(() => Number(route.params.id))
 
 const { servicios, cargando, error, cargarDatos } = useServicios()
+
+// Estado para los favoritos en la vista de detalle
+const favoritos = ref(cargarFavoritos())
+
+// Guardamos automáticamente en localStorage ante cualquier cambio
+watch(favoritos, (nuevosFavoritos) => {
+  guardarFavoritos(nuevosFavoritos)
+}, { deep: true })
 
 onMounted(() => {
   cargarDatos()
@@ -60,6 +77,20 @@ onMounted(() => {
 const servicio = computed(() => {
   return servicios.value.find(s => s.id === idParam.value)
 })
+
+// Propiedad computada para saber si el servicio actual es favorito
+const esFavorito = computed(() => {
+  return favoritos.value.includes(idParam.value)
+})
+
+// Función para alternar el estado de favorito (Flujo: Componente actualiza su ref reactivo -> el watch guarda en localStorage)
+const toggleFavorito = () => {
+  if (esFavorito.value) {
+    favoritos.value = favoritos.value.filter(favId => favId !== idParam.value)
+  } else {
+    favoritos.value.push(idParam.value)
+  }
+}
 
 const formatoPrecio = (precio) => {
   return precio.toLocaleString('es-CL', {
@@ -71,7 +102,12 @@ const formatoPrecio = (precio) => {
 
 <style scoped>
 .detalle-container { padding: 20px; max-width: 800px; margin: 0 auto; }
-.detalle-card { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.detalle-card { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-header h1 { margin: 0 0 10px 0; padding-right: 40px; }
+.btn-favorito { background: none; border: none; font-size: 2em; cursor: pointer; color: #ccc; transition: color 0.3s; padding: 0; line-height: 1; }
+.btn-favorito.activo { color: #f1c40f; }
+.btn-favorito:hover { transform: scale(1.1); }
 .categoria-badge { display: inline-block; background-color: #eee; padding: 5px 10px; border-radius: 20px; font-size: 0.9em; color: #555; margin-bottom: 20px; }
 .descripcion-completa { font-size: 1.1em; line-height: 1.6; color: #333; margin-bottom: 30px; }
 .info-adicional { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 25px; }
