@@ -45,7 +45,10 @@ import { useRoute, RouterLink } from 'vue-router'
 import { obtenerServicios } from '../services/serviciosApi.js'
 
 const route = useRoute()
-const idParam = Number(route.params.id)
+// Convertimos el id a una propiedad computada.
+// Esto asegura que si la ruta cambia (ej: navegando de /servicios/1 a /servicios/2 sin recargar),
+// idParam se recalcula automáticamente manteniendo la reactividad.
+const idParam = computed(() => Number(route.params.id))
 
 const servicios = ref([])
 const cargando = ref(true)
@@ -69,7 +72,7 @@ onMounted(() => {
 })
 
 const servicio = computed(() => {
-  return servicios.value.find(s => s.id === idParam)
+  return servicios.value.find(s => s.id === idParam.value)
 })
 
 const formatoPrecio = (precio) => {
