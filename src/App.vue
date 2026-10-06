@@ -1,10 +1,9 @@
 <template>
   <div id="app">
     <NavBar />
-    <!-- El RouterView se activará en la Etapa 2. Por ahora mostramos un mensaje. -->
-    <main style="padding: 20px;">
-      <h2>Estructura Inicial Creada</h2>
-      <p>Las vistas y componentes están listos para integrarse con Vue Router.</p>
+    <main>
+      <!-- Aquí se renderizan las vistas correspondientes a cada ruta -->
+      <RouterView />
     </main>
   </div>
 </template>
@@ -21,5 +20,10 @@ body {
   padding: 0;
   box-sizing: border-box;
   background-color: #f9f9f9;
+}
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 </style>
