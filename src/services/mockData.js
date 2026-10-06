@@ -1,0 +1,74 @@
+export const serviciosMock = [
+  {
+    id: 1,
+    nombre: "Asesoría Contable Integral",
+    categoria: "Contabilidad",
+    descripcion: "Gestión de impuestos y contabilidad mensual para pymes en Chillán.",
+    descripcionCompleta: "Ofrecemos una asesoría contable completa que incluye declaraciones de impuestos mensuales (F29), balances anuales, gestión de remuneraciones y asesoramiento tributario. Ideal para empresas de la región de Ñuble que buscan mantener sus finanzas ordenadas.",
+    precio: 85000,
+    disponible: true
+  },
+  {
+    id: 2,
+    nombre: "Diseño Web Corporativo",
+    categoria: "Tecnología",
+    descripcion: "Creación de sitios web profesionales y responsivos.",
+    descripcionCompleta: "Desarrollo de sitios web a la medida utilizando tecnologías modernas (Vue, React, WordPress). Incluye optimización SEO, integración con redes sociales y diseño adaptado a dispositivos móviles para potenciar su presencia digital en Ñuble.",
+    precio: 350000,
+    disponible: true
+  },
+  {
+    id: 3,
+    nombre: "Consultoría Agrícola",
+    categoria: "Agricultura",
+    descripcion: "Asesoramiento técnico para optimización de cultivos en la zona central.",
+    descripcionCompleta: "Nuestra consultoría agrícola está enfocada en mejorar el rendimiento de los cultivos típicos de la región de Ñuble. Incluye análisis de suelo, recomendaciones de fertilización, control de plagas y uso eficiente del agua.",
+    precio: 120000,
+    disponible: false
+  },
+  {
+    id: 4,
+    nombre: "Clases Particulares de Matemáticas",
+    categoria: "Educación",
+    descripcion: "Reforzamiento para enseñanza media y preparación PAES.",
+    descripcionCompleta: "Clases personalizadas de matemáticas dirigidas a estudiantes de enseñanza media. Metodología enfocada en la comprensión de conceptos y resolución de problemas, con preparación intensiva para la Prueba de Acceso a la Educación Superior (PAES).",
+    precio: 15000,
+    disponible: true
+  },
+  {
+    id: 5,
+    nombre: "Servicios Legales y Redacción de Contratos",
+    categoria: "Legal",
+    descripcion: "Redacción y revisión de contratos comerciales y civiles.",
+    descripcionCompleta: "Asistencia legal profesional en la redacción, revisión y negociación de todo tipo de contratos. Nos aseguramos de proteger sus intereses legales y brindar seguridad jurídica a sus transacciones y acuerdos en la región.",
+    precio: 60000,
+    disponible: true
+  },
+  {
+    id: 6,
+    nombre: "Arquitectura y Planimetría",
+    categoria: "Construcción",
+    descripcion: "Diseño arquitectónico y regularización de viviendas.",
+    descripcionCompleta: "Servicios integrales de arquitectura que abarcan desde el diseño inicial de viviendas hasta la regularización de ampliaciones ante la Dirección de Obras Municipales (DOM). Incluye elaboración de planos y especificaciones técnicas.",
+    precio: 450000,
+    disponible: true
+  },
+  {
+    id: 7,
+    nombre: "Fotografía Profesional de Eventos",
+    categoria: "Audiovisual",
+    descripcion: "Cobertura fotográfica para matrimonios y eventos corporativos.",
+    descripcionCompleta: "Capturamos los mejores momentos de sus eventos con equipos de alta gama. El servicio incluye la cobertura total del evento, edición profesional de las fotografías y entrega en formato digital de alta resolución.",
+    precio: 250000,
+    disponible: false
+  },
+  {
+    id: 8,
+    nombre: "Mantenimiento de Redes e Informática",
+    categoria: "Tecnología",
+    descripcion: "Soporte técnico y configuración de redes para oficinas.",
+    descripcionCompleta: "Servicio de diagnóstico, reparación y mantenimiento preventivo de equipos computacionales. Configuración de redes locales (LAN/WLAN), instalación de software y respaldo de información vital para su negocio.",
+    precio: 45000,
+    disponible: true
+  }
+];
